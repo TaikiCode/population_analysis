@@ -26,6 +26,7 @@ module.exports = {
   rules: {
     'no-use-before-define': 'off',
     '@typescript-eslint/no-use-before-define': 'off',
+    'react/prop-types': ['off'],
     'react/function-component-definition': [
       2,
       {
