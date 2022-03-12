@@ -4,58 +4,65 @@ module.exports = {
     es2021: true,
   },
   extends: [
-    "plugin:react/recommended",
-    "airbnb",
-    "airbnb/hooks",
-    "plugin:@typescript-eslint/recommended",
-    "plugin:@typescript-eslint/recommended-requiring-type-checking",
-    "prettier",
+    'plugin:react/recommended',
+    'airbnb',
+    'airbnb/hooks',
+    'plugin:@typescript-eslint/recommended',
+    'plugin:@typescript-eslint/recommended-requiring-type-checking',
+    'prettier',
   ],
-  parser: "@typescript-eslint/parser",
+  parser: '@typescript-eslint/parser',
   parserOptions: {
     ecmaFeatures: {
       jsx: true,
     },
-    ecmaVersion: "latest",
-    sourceType: "module",
+    ecmaVersion: 'latest',
+    sourceType: 'module',
     tsconfigRootDir: __dirname,
-    project: ["./tsconfig.json"],
+    project: ['./tsconfig.json'],
   },
-  plugins: ["react", "@typescript-eslint"],
-  ignorePatterns: [".eslintrc.js"],
+  plugins: ['react', '@typescript-eslint'],
+  ignorePatterns: ['.eslintrc.js'],
   rules: {
-    "no-use-before-define": "off",
-    "@typescript-eslint/no-use-before-define": "off",
-    "import/prefer-default-export": "off",
-    "import/extensions": [
-      "error",
+    'no-use-before-define': 'off',
+    '@typescript-eslint/no-use-before-define': 'off',
+    'react/function-component-definition': [
+      2,
       {
-        js: "never",
-        jsx: "never",
-        ts: "never",
-        tsx: "never",
+        namedComponents: 'arrow-function',
+        unnamedComponents: 'arrow-function',
       },
     ],
-    "react/jsx-filename-extension": [
-      "error",
+    'import/prefer-default-export': 'off',
+    'import/extensions': [
+      'error',
       {
-        extensions: [".jsx", ".tsx"],
+        js: 'never',
+        jsx: 'never',
+        ts: 'never',
+        tsx: 'never',
       },
     ],
-    "react/react-in-jsx-scope": "off",
-    "no-void": [
-      "error",
+    'react/jsx-filename-extension': [
+      'error',
+      {
+        extensions: ['.jsx', '.tsx'],
+      },
+    ],
+    'react/react-in-jsx-scope': 'off',
+    'no-void': [
+      'error',
       {
         allowAsStatement: true,
       },
     ],
   },
   settings: {
-    "import/resolver": {
+    'import/resolver': {
       node: {
-        paths: ["src"],
-        extensions: [".js", ".jsx", ".ts", ".tsx"],
+        paths: ['src'],
+        extensions: ['.js', '.jsx', '.ts', '.tsx'],
       },
     },
   },
-};
+}
