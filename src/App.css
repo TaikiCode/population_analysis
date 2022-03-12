@@ -29,6 +29,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  padding: 15px;
 }
 
 /* 都道府県選択部分 */
