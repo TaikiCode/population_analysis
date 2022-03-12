@@ -1,8 +1,12 @@
 import { VFC } from 'react'
 
-const Header: VFC = () => (
-  <div>
-    <h1>ここにタイトルがくる</h1>
+interface Props {
+  title: string
+}
+
+const Header: VFC<Props> = ({ title }) => (
+  <div className="header">
+    <h2>{title}</h2>
   </div>
 )
 

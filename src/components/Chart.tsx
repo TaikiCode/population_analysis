@@ -1,8 +1,8 @@
 import { VFC } from 'react'
 
 const Chart: VFC = () => (
-  <div>
-    <h1>ここにchartが入る</h1>
+  <div className="chartArea">
+    <p>ここにchartが入る</p>
   </div>
 )
 

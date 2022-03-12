@@ -3,3 +3,50 @@
   padding: 0;
   box-sizing: border-box;
 }
+
+/* ページ全体 */
+.container {
+  height: 100vh;
+  width: 100vw;
+}
+
+
+/* タイトル部分 */
+.header {
+  height: 7%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: gray;
+}
+
+/* メイン部分 */
+.body {
+  height: 93%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+/* 都道府県選択部分 */
+.prefectureListArea {
+  height: 45%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: yellow;
+}
+
+/* チャート部分 */
+.chartArea {
+  height: 55%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: greenyellow;
+}

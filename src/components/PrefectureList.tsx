@@ -1,8 +1,8 @@
 import { VFC } from 'react'
 
 const PrefectureList: VFC = () => (
-  <div>
-    <h1>ここに都道府県一覧が入る。</h1>
+  <div className="prefectureListArea">
+    <p>ここに都道府県一覧が入る。</p>
   </div>
 )
 
