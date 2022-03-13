@@ -1,13 +1,7 @@
 import { VFC } from 'react'
 import { useQueryPrefectures } from '../hooks/useQueryPrefectures'
 import { Prefecture } from '../types/types'
-
-const PrefectureItem: VFC<Prefecture> = ({ prefCode, prefName }) => (
-  <label htmlFor={prefName}>
-    <input id={prefName} type="checkbox" />
-    {prefName}
-  </label>
-)
+import PrefectureItem from './PrefectureItem'
 
 const PrefectureList: VFC = () => {
   const { status, data } = useQueryPrefectures()
@@ -18,10 +12,7 @@ const PrefectureList: VFC = () => {
     <div className="prefectureListArea">
       <h4>都道府県</h4>
       <div className="prefectureList">
-        {data &&
-          data.map(({ prefCode, prefName }) => (
-            <PrefectureItem key={prefCode} prefCode={prefCode} prefName={prefName} />
-          ))}
+        {data && data.map((pref: Prefecture) => <PrefectureItem key={pref.prefCode} pref={pref} />)}
       </div>
     </div>
   )

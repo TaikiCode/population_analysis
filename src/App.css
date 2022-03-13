@@ -54,6 +54,17 @@
   overflow: scroll;
 }
 
+.prefectureList label {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.prefectureList input {
+  cursor: pointer;
+  margin-right: 5px;
+}
+
 /* チャート部分 */
 .chartArea {
   height: 55%;
