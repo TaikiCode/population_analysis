@@ -17,6 +17,9 @@ export interface Population {
 }
 
 export interface Chart {
-  name: number
-  [prefName: string]: number
+  categories: string[]
+  series: {
+    name: string
+    data: number[]
+  }
 }

@@ -18,11 +18,18 @@ const getOnlyTotalPopulation = (result: Population): TotalPopulation[] => {
 }
 
 // chartに表示させるため、データ構造を変更
-const changeFormatForChart = (totalPopulation: TotalPopulation[], prefName: string): Chart[] =>
-  totalPopulation.map((data: TotalPopulation) => ({
-    name: data.year,
-    [prefName]: data.value,
-  }))
+const changeFormatForHighChart = (totalPopulation: TotalPopulation[], prefName: string): Chart => {
+  // 年数（X軸ラベル）を文字列型にして取得
+  const years: string[] = totalPopulation.map((data: TotalPopulation) => String(data.year))
+  const values: number[] = totalPopulation.map((data: TotalPopulation) => data.value)
+  return {
+    categories: years,
+    series: {
+      name: prefName,
+      data: values,
+    },
+  }
+}
 
 export const useQueryPopulation = (prefList: Prefecture[]) => {
   const getData = async ({ prefCode, prefName }: Prefecture) => {
@@ -30,7 +37,7 @@ export const useQueryPopulation = (prefList: Prefecture[]) => {
       headers: { 'X-API-KEY': API_KEY },
     })
     const totalPopulation = getOnlyTotalPopulation(data.result)
-    return changeFormatForChart(totalPopulation, prefName)
+    return changeFormatForHighChart(totalPopulation, prefName)
   }
 
   const results = useQueries(
@@ -41,14 +48,9 @@ export const useQueryPopulation = (prefList: Prefecture[]) => {
     }))
   )
 
-//   const data = results.map((result) => result.data)
-//   console.log(data)
-
   return {
-    results,
+    data: results.map((result) => result.data),
     isLoading: results.some((result) => result.isLoading),
-    isError: results.some((result) => result.isError)
+    isError: results.some((result) => result.isError),
   }
-
 }
-
