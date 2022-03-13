@@ -1,23 +1,28 @@
 import { VFC } from 'react'
+import { useQueryPrefectures } from '../hooks/useQueryPrefectures'
+import { Prefecture } from '../types/types'
+import PrefectureItem from './PrefectureItem'
 
-const demoData = ['東京', '大阪', '神奈川', '北海道', '兵庫県']
+interface Props {
+  setSelectedPref: (pref: Prefecture) => void
+}
 
-const Prefecture: VFC<{ name: string }> = ({ name }) => (
-  <label htmlFor={name}>
-    <input id={name} type="checkbox" />
-    {name}
-  </label>
-)
+const PrefectureList: VFC<Props> = ({ setSelectedPref }) => {
+  const { status, data } = useQueryPrefectures()
+  if (status === 'loading') return <div>Loading...</div>
+  if (status === 'error') return <div>Error</div>
 
-const PrefectureList: VFC = () => (
-  <div className="prefectureListArea">
-    <div>都道府県</div>
-    <div className="prefectureList">
-      {demoData.map((name: string) => (
-        <Prefecture key={name} name={name} />
-      ))}
+  return (
+    <div className="prefectureListArea">
+      <h4>都道府県</h4>
+      <div className="prefectureList">
+        {data &&
+          data.map((pref: Prefecture) => (
+            <PrefectureItem key={pref.prefCode} pref={pref} setSelectedPref={setSelectedPref} />
+          ))}
+      </div>
     </div>
-  </div>
-)
+  )
+}
 
 export default PrefectureList
