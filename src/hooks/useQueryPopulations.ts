@@ -33,7 +33,7 @@ export const useQueryPopulation = ({ prefCode, prefName }: Prefecture) => {
   }
 
   return useQuery<Chart[], Error>({
-    queryKey: 'population',
+    queryKey: ['population', prefCode],
     queryFn: getData,
     staleTime: Infinity,
   })
