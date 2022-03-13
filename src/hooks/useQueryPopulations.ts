@@ -1,4 +1,4 @@
-import { useQuery } from 'react-query'
+import { useQueries } from 'react-query'
 import axios from 'axios'
 import { Population, TotalPopulation, Chart, Prefecture } from '../types/types'
 
@@ -18,13 +18,14 @@ const getOnlyTotalPopulation = (result: Population): TotalPopulation[] => {
 }
 
 // chartに表示させるため、データ構造を変更
-const changeFormatForChart = (totalPopulation: TotalPopulation[], prefName: string): Chart[] => totalPopulation.map((data: TotalPopulation) => ({
+const changeFormatForChart = (totalPopulation: TotalPopulation[], prefName: string): Chart[] =>
+  totalPopulation.map((data: TotalPopulation) => ({
     name: data.year,
     [prefName]: data.value,
   }))
 
-export const useQueryPopulation = (pref: Prefecture) => {
-  const getData = async ({prefCode, prefName}: Prefecture) => {
+export const useQueryPopulation = (prefList: Prefecture[]) => {
+  const getData = async ({ prefCode, prefName }: Prefecture) => {
     const { data } = await axios.get<Response>(`${URL}${prefCode}`, {
       headers: { 'X-API-KEY': API_KEY },
     })
@@ -32,9 +33,22 @@ export const useQueryPopulation = (pref: Prefecture) => {
     return changeFormatForChart(totalPopulation, prefName)
   }
 
-  return useQuery<Chart[], Error>({
-    queryKey: ['population', pref.prefCode],
-    queryFn: () => getData(pref),
-    staleTime: Infinity,
-  })
+  const results = useQueries(
+    prefList.map((pref: Prefecture) => ({
+      queryKey: ['population', pref.prefCode],
+      queryFn: () => getData(pref),
+      staleTime: Infinity,
+    }))
+  )
+
+//   const data = results.map((result) => result.data)
+//   console.log(data)
+
+  return {
+    results,
+    isLoading: results.some((result) => result.isLoading),
+    isError: results.some((result) => result.isError)
+  }
+
 }
+

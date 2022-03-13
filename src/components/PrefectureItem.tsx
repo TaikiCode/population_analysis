@@ -3,13 +3,13 @@ import { Prefecture } from '../types/types'
 
 interface Props {
   pref: Prefecture
-  setSelectedPref: (pref: Prefecture) => void
+  handleSelectPrefecture: (pref: Prefecture) => void
 }
-const PrefectureItem: VFC<Props> = ({ pref, setSelectedPref }) => {
+const PrefectureItem: VFC<Props> = ({ pref, handleSelectPrefecture }) => {
   const { prefName } = pref
   return (
     <label htmlFor={prefName}>
-      <input id={prefName} type="checkbox" onChange={() => setSelectedPref(pref)} />
+      <input id={prefName} type="checkbox" onChange={() => handleSelectPrefecture(pref)} />
       {prefName}
     </label>
   )

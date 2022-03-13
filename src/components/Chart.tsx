@@ -4,16 +4,17 @@ import { useQueryPopulation } from '../hooks/useQueryPopulations'
 import { Prefecture } from '../types/types'
 
 interface Props {
-  selectedPref: Prefecture
+  selectedPref: Prefecture[]
 }
 
 const Chart: VFC<Props> = ({ selectedPref }) => {
-  const DEMO_DATA = [{ prefCode: 15, prefName: '新潟県' }]
+  // const { status, data } = useQueryPopulation(DEMO_DATA)
+  const { results, isLoading, isError } = useQueryPopulation(selectedPref)
 
-  const { status, data } = useQueryPopulation(selectedPref)
+  const { data } = results[0]
 
-  if (status === 'loading') return <div className="chartArea">Loading...</div>
-  if (status === 'error') return <div>Error</div>
+  if (isLoading) return <div className="chartArea">Loading...</div>
+  if (isError) return <div>Error</div>
 
   return (
     <div className="chartArea">
@@ -28,7 +29,7 @@ const Chart: VFC<Props> = ({ selectedPref }) => {
           </YAxis>
           <Tooltip />
           <Legend align="right" verticalAlign="top" height={36} />
-          {[selectedPref].map((pref: Prefecture) => (
+          {selectedPref.map((pref: Prefecture) => (
             <Line key={pref.prefCode} type="monotone" dataKey={pref.prefName} stroke="#8884d8" />
           ))}
         </LineChart>

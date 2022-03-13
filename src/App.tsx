@@ -18,11 +18,18 @@ const queryClient = new QueryClient({
 
 const App: VFC = () => {
   // 選択中の都道府県
-  const [selectedPref, setSelectedPref] = useState<Prefecture>({ prefCode: 15, prefName: '新潟県' })
+  const [selectedPref, setSelectedPref] = useState<Prefecture[]>([{ prefCode: 15, prefName: '新潟県' }])
+
+  const handleSelectPrefecture = (prefecture: Prefecture) => {
+    const exists: boolean = selectedPref.includes(prefecture)
+
+    setSelectedPref((prevList) => (exists ? prevList.filter((pref) => pref !== prefecture) : [...prevList, prefecture]))
+  }
+
   return (
     <QueryClientProvider client={queryClient}>
       <Layout>
-        <PrefectureList setSelectedPref={setSelectedPref} />
+        <PrefectureList handleSelectPrefecture={handleSelectPrefecture} />
         <Chart selectedPref={selectedPref} />
       </Layout>
       <ReactQueryDevtools initialIsOpen={false} />
