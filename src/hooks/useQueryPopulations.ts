@@ -23,8 +23,8 @@ const changeFormatForChart = (totalPopulation: TotalPopulation[], prefName: stri
     [prefName]: data.value,
   }))
 
-export const useQueryPopulation = ({ prefCode, prefName }: Prefecture) => {
-  const getData = async () => {
+export const useQueryPopulation = (pref: Prefecture) => {
+  const getData = async ({prefCode, prefName}: Prefecture) => {
     const { data } = await axios.get<Response>(`${URL}${prefCode}`, {
       headers: { 'X-API-KEY': API_KEY },
     })
@@ -33,8 +33,8 @@ export const useQueryPopulation = ({ prefCode, prefName }: Prefecture) => {
   }
 
   return useQuery<Chart[], Error>({
-    queryKey: ['population', prefCode],
-    queryFn: getData,
+    queryKey: ['population', pref.prefCode],
+    queryFn: () => getData(pref),
     staleTime: Infinity,
   })
 }

@@ -8,6 +8,8 @@ interface Props {
 }
 
 const Chart: VFC<Props> = ({ selectedPref }) => {
+  const DEMO_DATA = [{ prefCode: 15, prefName: '新潟県' }]
+
   const { status, data } = useQueryPopulation(selectedPref)
 
   if (status === 'loading') return <div className="chartArea">Loading...</div>
