@@ -1,7 +1,8 @@
 import { VFC } from 'react'
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Label } from 'recharts'
+import { useQueryPopulation } from '../hooks/useQueryPopulations'
 
-const data = [
+const demo = [
   {
     name: 'Page A',
     uv: 4000,
@@ -46,24 +47,34 @@ const data = [
   },
 ]
 
-const Chart: VFC = () => (
-  <div className="chartArea">
-    <ResponsiveContainer width="100%" height="90%">
-      <LineChart data={data} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
-        <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="name">
-          <Label value="Xラベル名" offset={-10} position="insideBottom" />
-        </XAxis>
-        <YAxis>
-          <Label value="Yラベル名" offset={-23} position="insideTopLeft" />
-        </YAxis>
-        <Tooltip />
-        <Legend align="right" verticalAlign="top" height={36} />
-        <Line type="monotone" dataKey="pv" stroke="#8884d8" />
-        <Line type="monotone" dataKey="uv" stroke="#82ca9d" />
-      </LineChart>
-    </ResponsiveContainer>
-  </div>
-)
+const Chart: VFC = () => {
+  const DEMO_DATA = { prefCode: 15, prefName: '新潟県' }
+  const { status, data } = useQueryPopulation(DEMO_DATA)
+
+  if (status === 'loading') return <div>Loading...</div>
+  if (status === 'error') return <div>Error</div>
+
+  console.log(data)
+
+  return (
+    <div className="chartArea">
+      <ResponsiveContainer width="100%" height="90%">
+        <LineChart data={demo} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+          <CartesianGrid strokeDasharray="3 3" />
+          <XAxis dataKey="name">
+            <Label value="Xラベル名" offset={-10} position="insideBottom" />
+          </XAxis>
+          <YAxis>
+            <Label value="Yラベル名" offset={-23} position="insideTopLeft" />
+          </YAxis>
+          <Tooltip />
+          <Legend align="right" verticalAlign="top" height={36} />
+          <Line type="monotone" dataKey="pv" stroke="#8884d8" />
+          <Line type="monotone" dataKey="uv" stroke="#82ca9d" />
+        </LineChart>
+      </ResponsiveContainer>
+    </div>
+  )
+}
 
 export default Chart

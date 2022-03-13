@@ -1,5 +1,6 @@
 import { VFC } from 'react'
 import { QueryClient, QueryClientProvider } from 'react-query'
+import { ReactQueryDevtools } from 'react-query/devtools'
 import Chart from './components/Chart'
 import Layout from './components/Layout'
 import PrefectureList from './components/PrefectureList'
@@ -20,6 +21,7 @@ const App: VFC = () => (
       <PrefectureList />
       <Chart />
     </Layout>
+    <ReactQueryDevtools initialIsOpen={false} />
   </QueryClientProvider>
 )
 
