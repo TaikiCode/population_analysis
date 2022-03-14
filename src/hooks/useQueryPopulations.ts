@@ -1,9 +1,6 @@
 import { useQueries } from 'react-query'
-import axios from 'axios'
 import { Population, TotalPopulation, Chart, Prefecture } from '../types/types'
-
-const URL = 'https://opendata.resas-portal.go.jp/api/v1/population/composition/perYear?cityCode=-&prefCode='
-const API_KEY = process.env.REACT_APP_RESAS_API_KEY || ''
+import { client } from '../utils/axios'
 
 interface Response {
   message: null
@@ -20,8 +17,8 @@ const getOnlyTotalPopulation = (result: Population): TotalPopulation[] => {
 // chartに表示させるため、データ構造を変更
 const changeFormatForHighChart = (totalPopulation: TotalPopulation[], prefName: string): Chart => {
   // 年数（X軸ラベル）を文字列型にして取得
-  const years: string[] = totalPopulation.map((data: TotalPopulation) => String(data.year))
-  const values: number[] = totalPopulation.map((data: TotalPopulation) => data.value)
+  const years: string[] = totalPopulation.map((data) => String(data.year))
+  const values: number[] = totalPopulation.map((data) => data.value)
   return {
     categories: years,
     series: {
@@ -31,11 +28,13 @@ const changeFormatForHighChart = (totalPopulation: TotalPopulation[], prefName: 
   }
 }
 
+// BASE_URLの続きにくるpath
+const URL_PATH = '/population/composition/perYear?cityCode=-&prefCode='
+
+
 export const useQueryPopulation = (prefList: Prefecture[]) => {
   const getData = async ({ prefCode, prefName }: Prefecture) => {
-    const { data } = await axios.get<Response>(`${URL}${prefCode}`, {
-      headers: { 'X-API-KEY': API_KEY },
-    })
+    const { data } = await client.get<Response>(`${URL_PATH}${prefCode}`)
     const totalPopulation = getOnlyTotalPopulation(data.result)
     return changeFormatForHighChart(totalPopulation, prefName)
   }
