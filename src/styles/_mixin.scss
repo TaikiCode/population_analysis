@@ -1,0 +1,7 @@
+// 真ん中中央寄
+@mixin flexCenter($direction: row) {
+  display: flex;
+  flex-direction: $direction;
+  justify-content: center;
+  align-items: center;
+}

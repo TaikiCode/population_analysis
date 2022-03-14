@@ -4,8 +4,8 @@ import { ReactQueryDevtools } from 'react-query/devtools'
 import Chart from './components/Chart'
 import Layout from './components/Layout'
 import PrefectureList from './components/PrefectureList'
-import './App.scss'
 import { useSelectedPrefs } from './hooks/useSelectedPrefs'
+import './styles/style.scss'
 
 const queryClient = new QueryClient({
   defaultOptions: {

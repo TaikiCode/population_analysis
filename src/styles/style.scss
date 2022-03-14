@@ -1,25 +1,6 @@
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-/* 変数定義 */
-
-$fheight: (
-  'header': 7%,
-  'body': 93%,
-  'prefectureListArea': 40%,
-  'chartArea': 60%,
-);
-
-@mixin flexCenter($direction: row) {
-  display: flex;
-  flex-direction: $direction;
-  justify-content: center;
-  align-items: center;
-}
-
+@use 'reset';
+@use 'variables' as v;
+@use 'mixin' as m;
 
 /* ページ全体 */
 .container {
@@ -29,23 +10,23 @@ $fheight: (
 
 /* タイトル部分 */
 .header {
-  height: map-get($fheight, header);
+  height: map-get(v.$fheight, header);
   width: 100%;
   background: gray;
   color: white;
-  @include flexCenter
+  @include m.flexCenter;
 }
 
 /* メイン部分 */
 .body {
-  height: map-get($fheight, body);
+  height: map-get(v.$fheight, body);
   width: 100%;
-  @include flexCenter(column)
+  @include m.flexCenter(column);
 }
 
 /* 都道府県選択部分 */
 .prefectureListArea {
-  height: map-get($fheight, prefectureListArea);
+  height: map-get(v.$fheight, prefectureListArea);
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -63,7 +44,7 @@ $fheight: (
     gap: 15px;
     overflow: scroll;
     label {
-      @include flexCenter
+      @include m.flexCenter;
     }
     input {
       cursor: pointer;
@@ -74,10 +55,12 @@ $fheight: (
 
 /* チャート部分 */
 .chartArea {
-  height: map-get($fheight, chartArea);
+  height: map-get(v.$fheight, chartArea);
   width: 100%;
-  @include flexCenter
+  @include m.flexCenter;
 }
+
+/* レスポンシブ設定 */
 
 $breakpoint: (
   'sp': 'screen and (min-width: 320px)',
@@ -94,6 +77,7 @@ $breakpoint: (
     padding: 5px 5%;
     h4 {
       text-align: left;
+      padding: 5px 0;
     }
   }
   .chartArea {
