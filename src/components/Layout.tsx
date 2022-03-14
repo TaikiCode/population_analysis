@@ -1,15 +1,16 @@
 import { VFC } from 'react'
 import Header from './Header'
+import Wrapper from './common/Wrapper'
 
 interface Props {
   children: React.ReactNode
 }
 
 const Layout: VFC<Props> = ({ children }) => (
-  <div className="container">
+  <Wrapper className="container">
     <Header title="都道府県別の総人口推移" />
-    <div className="body">{children}</div>
-  </div>
+    <Wrapper className="body">{children}</Wrapper>
+  </Wrapper>
 )
 
 export default Layout

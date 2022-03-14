@@ -1,53 +1,51 @@
 import { useQueries } from 'react-query'
-import axios from 'axios'
-import { Population, TotalPopulation, Chart, Prefecture } from '../types/types'
+import { Population, Prefecture } from '../types/types'
+import { client } from '../utils/axios'
+import { changeFormatForChart } from '../utils/changeFormatForChart'
 
-const URL = 'https://opendata.resas-portal.go.jp/api/v1/population/composition/perYear?cityCode=-&prefCode='
-const API_KEY = process.env.REACT_APP_RESAS_API_KEY || ''
-
+interface Result {
+  boundaryYear: number
+  data: {
+    label: string
+    data: Population[]
+  }[]
+}
 interface Response {
   message: null
-  result: Population
+  result: Result
 }
 
-// 取得したデータから「総人口」だけ取得
-const getOnlyTotalPopulation = (result: Population): TotalPopulation[] => {
+// BASE_URLの続きにくるpath
+const URL_PATH = '/population/composition/perYear?cityCode=-&prefCode='
+
+// 取得対象になるラベル名
+const targetLabel = '総人口'
+// 取得したデータから指定したデータだけ取得する
+const getOnlyTargetData = (result: Result): Population[] => {
   const { data } = result
-  const totalPopulation = data.filter((item) => item.label === '総人口')[0]
+  const totalPopulation = data.filter((item) => item.label === targetLabel)[0]
   return totalPopulation.data
-}
-
-// chartに表示させるため、データ構造を変更
-const changeFormatForHighChart = (totalPopulation: TotalPopulation[], prefName: string): Chart => {
-  // 年数（X軸ラベル）を文字列型にして取得
-  const years: string[] = totalPopulation.map((data: TotalPopulation) => String(data.year))
-  const values: number[] = totalPopulation.map((data: TotalPopulation) => data.value)
-  return {
-    categories: years,
-    series: {
-      name: prefName,
-      data: values,
-    },
-  }
 }
 
 export const useQueryPopulation = (prefList: Prefecture[]) => {
   const getData = async ({ prefCode, prefName }: Prefecture) => {
-    const { data } = await axios.get<Response>(`${URL}${prefCode}`, {
-      headers: { 'X-API-KEY': API_KEY },
-    })
-    const totalPopulation = getOnlyTotalPopulation(data.result)
-    return changeFormatForHighChart(totalPopulation, prefName)
+    // 1) APIからデータ取得
+    const { data } = await client.get<Response>(`${URL_PATH}${prefCode}`)
+    // 2) 取得したデータの中から「総人口」に該当するデータのみ抽出
+    const totalPopulation = getOnlyTargetData(data.result)
+    // 3) 表示させるChartのデータ構造に合わせて、構造を変更
+    return changeFormatForChart(totalPopulation, prefName)
   }
 
   const results = useQueries(
     prefList.map((pref: Prefecture) => ({
       queryKey: ['population', pref.prefCode],
       queryFn: () => getData(pref),
-      //   staleTime: Infinity,
+      staleTime: Infinity,
     }))
   )
 
+  // クライアント側では、「data」と「status」だけ受け取れるようにする
   return {
     data: results.map((result) => result.data),
     isLoading: results.some((result) => result.isLoading),

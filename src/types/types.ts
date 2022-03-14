@@ -1,25 +1,10 @@
+// 複数のファイルで使用する型は、ここで定義する。
 export interface Prefecture {
   prefCode: number
   prefName: string
 }
 
-export interface TotalPopulation {
+export interface Population {
   year: number
   value: number
-}
-
-export interface Population {
-  boundaryYear: number
-  data: {
-    label: string
-    data: TotalPopulation[]
-  }[]
-}
-
-export interface Chart {
-  categories: string[]
-  series: {
-    name: string
-    data: number[]
-  }
 }

@@ -4,8 +4,8 @@ import { ReactQueryDevtools } from 'react-query/devtools'
 import Chart from './components/Chart'
 import Layout from './components/Layout'
 import PrefectureList from './components/PrefectureList'
-import './App.css'
 import { useSelectedPrefs } from './hooks/useSelectedPrefs'
+import './styles/style.scss'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -17,8 +17,6 @@ const queryClient = new QueryClient({
 })
 
 const App: VFC = () => {
-  // 選択中の都道府県
-
   const { selectedPref, handleSelectPref } = useSelectedPrefs()
   return (
     <QueryClientProvider client={queryClient}>
@@ -32,6 +30,3 @@ const App: VFC = () => {
 }
 
 export default App
-
-// Note
-// * 初期値を設定し、必ず最低１つ選択中の状態でないといけない仕様にする。

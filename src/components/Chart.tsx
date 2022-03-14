@@ -3,6 +3,10 @@ import Highcharts from 'highcharts'
 import HighchartsReact from 'highcharts-react-official'
 import { useQueryPopulation } from '../hooks/useQueryPopulations'
 import { Prefecture } from '../types/types'
+import Wrapper from './common/Wrapper'
+import { CHART_SIZE, DEFAULT_OPTIONS } from '../config/chartConfig'
+import { STATUS_MESSAGE } from '../config/statusMessage'
+import Status from './common/Status'
 
 interface Props {
   selectedPref: Prefecture[]
@@ -12,64 +16,31 @@ const Chart: VFC<Props> = ({ selectedPref }) => {
   const chartComponentRef = useRef<HighchartsReact.RefObject>(null)
   const { data, isLoading, isError } = useQueryPopulation(selectedPref)
 
-  if (!selectedPref.length) return <div className="chartArea">都道府県を選択してください。</div>
-  if (isLoading) return <div className="chartArea">Loading...</div>
-  if (isError) return <div>Error</div>
+  if (!selectedPref.length) return <Status className="chartStatus" message={STATUS_MESSAGE.isEmpty} />
+  if (isLoading) return <Status className="chartStatus" message={STATUS_MESSAGE.isLoading} />
+  if (isError) return <Status className="chartStatus" message={STATUS_MESSAGE.isError} />
 
   const options: Highcharts.Options = {
-    title: {
-      text: '',
-      style: {
-        display: 'none',
-      },
-    },
+    ...DEFAULT_OPTIONS,
     xAxis: {
-      title: {
-        text: '年度',
-      },
-      categories: data[0]?.categories,
-    },
-    yAxis: {
-      title: {
-        text: '人口数',
-      },
-    },
-    legend: {
-      layout: 'vertical',
-      align: 'right',
-      verticalAlign: 'middle',
+      ...DEFAULT_OPTIONS.xAxis,
+      categories: data[0]?.categories, // X軸ラベルの値
     },
     series: data.map((item) => ({
       type: 'line',
       ...item?.series,
     })),
-    responsive: {
-      rules: [
-        {
-          condition: {
-            maxWidth: 500,
-          },
-          chartOptions: {
-            legend: {
-              layout: 'horizontal',
-              align: 'center',
-              verticalAlign: 'bottom',
-            },
-          },
-        },
-      ],
-    },
   }
 
   return (
-    <div className="chartArea">
+    <Wrapper className="chartArea">
       <HighchartsReact
         highcharts={Highcharts}
         options={options}
         ref={chartComponentRef}
-        containerProps={{ style: { width: '100%', height: '100%' } }}
+        containerProps={{ style: CHART_SIZE }}
       />
-    </div>
+    </Wrapper>
   )
 }
 
