@@ -44,7 +44,7 @@ export const useQueryPopulation = (prefList: Prefecture[]) => {
     prefList.map((pref: Prefecture) => ({
       queryKey: ['population', pref.prefCode],
       queryFn: () => getData(pref),
-      staleTime: Infinity,
+      //   staleTime: Infinity,
     }))
   )
 

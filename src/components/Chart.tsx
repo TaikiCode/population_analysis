@@ -30,14 +30,6 @@ const Chart: VFC<Props> = ({ selectedPref }) => {
         text: '人口数',
       },
     },
-    // plotOptions: {
-    //   line: {
-    //     dataLabels: {
-    //       enabled: true,
-    //     },
-    //     enableMouseTracking: false,
-    //   },
-    // },
     series: data.map((item) => ({
       type: 'line',
       ...item?.series,
