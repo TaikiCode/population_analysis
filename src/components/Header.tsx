@@ -1,13 +1,14 @@
 import { VFC } from 'react'
+import Wrapper from './Wrapper'
 
 interface Props {
   title: string
 }
 
 const Header: VFC<Props> = ({ title }) => (
-  <div className="header">
+  <Wrapper className="header">
     <h2>{title}</h2>
-  </div>
+  </Wrapper>
 )
 
 export default Header

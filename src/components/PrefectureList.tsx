@@ -2,26 +2,27 @@ import { VFC } from 'react'
 import { useQueryPrefectures } from '../hooks/useQueryPrefectures'
 import { Prefecture } from '../types/types'
 import PrefectureItem from './PrefectureItem'
+import Wrapper from './Wrapper'
 
 interface Props {
   handleSelectPref: (pref: Prefecture) => void
 }
 
 const PrefectureList: VFC<Props> = ({ handleSelectPref }) => {
-  const { status, data } = useQueryPrefectures()
-  if (status === 'loading') return <div>Loading...</div>
-  if (status === 'error') return <div>Error</div>
+  const { data, isLoading, isError } = useQueryPrefectures()
+  if (isLoading) return <Wrapper className="prefectureListArea">Loading...</Wrapper>
+  if (isError) return <Wrapper className="prefectureListArea">Error</Wrapper>
 
   return (
-    <div className="prefectureListArea">
+    <Wrapper className="prefectureListArea">
       <h4>都道府県</h4>
-      <div className="prefectureList">
+      <Wrapper className="prefectureList">
         {data &&
           data.map((pref: Prefecture) => (
             <PrefectureItem key={pref.prefCode} pref={pref} handleSelectPref={handleSelectPref} />
           ))}
-      </div>
-    </div>
+      </Wrapper>
+    </Wrapper>
   )
 }
 

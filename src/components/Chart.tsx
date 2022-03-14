@@ -3,6 +3,7 @@ import Highcharts from 'highcharts'
 import HighchartsReact from 'highcharts-react-official'
 import { useQueryPopulation } from '../hooks/useQueryPopulations'
 import { Prefecture } from '../types/types'
+import Wrapper from './Wrapper'
 
 interface Props {
   selectedPref: Prefecture[]
@@ -12,9 +13,9 @@ const Chart: VFC<Props> = ({ selectedPref }) => {
   const chartComponentRef = useRef<HighchartsReact.RefObject>(null)
   const { data, isLoading, isError } = useQueryPopulation(selectedPref)
 
-  if (!selectedPref.length) return <div className="chartArea">都道府県を選択してください。</div>
-  if (isLoading) return <div className="chartArea">Loading...</div>
-  if (isError) return <div>Error</div>
+  if (!selectedPref.length) return <Wrapper className="chartArea">都道府県を選択してください。</Wrapper>
+  if (isLoading) return <Wrapper className="chartArea">Loading...</Wrapper>
+  if (isError) return <Wrapper className="chartArea">Error</Wrapper>
 
   const options: Highcharts.Options = {
     title: {
@@ -62,14 +63,14 @@ const Chart: VFC<Props> = ({ selectedPref }) => {
   }
 
   return (
-    <div className="chartArea">
+    <Wrapper className="chartArea">
       <HighchartsReact
         highcharts={Highcharts}
         options={options}
         ref={chartComponentRef}
         containerProps={{ style: { width: '100%', height: '100%' } }}
       />
-    </div>
+    </Wrapper>
   )
 }
 
