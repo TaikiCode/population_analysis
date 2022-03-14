@@ -4,37 +4,48 @@
   box-sizing: border-box;
 }
 
+/* 変数定義 */
+
+$fheight: (
+  'header': 7%,
+  'body': 93%,
+  'prefectureListArea': 40%,
+  'chartArea': 60%,
+);
+
+@mixin flexCenter($direction: row) {
+  display: flex;
+  flex-direction: $direction;
+  justify-content: center;
+  align-items: center;
+}
+
+
 /* ページ全体 */
 .container {
   height: 100vh;
   width: 100vw;
 }
 
-
 /* タイトル部分 */
 .header {
-  height: 7%;
+  height: map-get($fheight, header);
   width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
   background: gray;
+  @include flexCenter
 }
 
 /* メイン部分 */
 .body {
-  height: 93%;
+  height: map-get($fheight, body);
   width: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
   padding: 15px;
+  @include flexCenter(column)
 }
 
 /* 都道府県選択部分 */
 .prefectureListArea {
-  height: 40%;
+  height: map-get($fheight, prefectureListArea);
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -51,25 +62,19 @@
     gap: 15px;
     overflow: scroll;
     label {
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      @include flexCenter
     }
     input {
       cursor: pointer;
       margin-right: 5px;
     }
   }
-  
 }
-
 
 /* チャート部分 */
 .chartArea {
-  height: 60%;
+  height: map-get($fheight, chartArea);
   width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
   padding: 2% 10% 0 10%;
+  @include flexCenter
 }
