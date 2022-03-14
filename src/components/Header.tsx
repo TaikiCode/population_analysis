@@ -1,5 +1,5 @@
 import { VFC } from 'react'
-import Wrapper from './Wrapper'
+import Wrapper from './common/Wrapper'
 
 interface Props {
   title: string

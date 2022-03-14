@@ -1,6 +1,6 @@
 import { VFC } from 'react'
 import Header from './Header'
-import Wrapper from './Wrapper'
+import Wrapper from './common/Wrapper'
 
 interface Props {
   children: React.ReactNode

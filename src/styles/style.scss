@@ -53,8 +53,15 @@
   }
 }
 
+.prefAreaStatus {
+  height: map-get(v.$fheight, prefectureListArea);
+  width: 100%;
+  @include m.flexCenter;
+}
+
 /* チャート部分 */
-.chartArea {
+.chartArea, 
+.chartStatus {
   height: map-get(v.$fheight, chartArea);
   width: 100%;
   @include m.flexCenter;

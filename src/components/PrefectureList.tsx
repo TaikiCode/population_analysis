@@ -2,8 +2,9 @@ import { VFC } from 'react'
 import { useQueryPrefectures } from '../hooks/useQueryPrefectures'
 import { Prefecture } from '../types/types'
 import PrefectureItem from './PrefectureItem'
-import Wrapper from './Wrapper'
+import Wrapper from './common/Wrapper'
 import { STATUS_MESSAGE } from '../config/statusMessage'
+import Status from './common/Status'
 
 interface Props {
   handleSelectPref: (pref: Prefecture) => void
@@ -11,8 +12,9 @@ interface Props {
 
 const PrefectureList: VFC<Props> = ({ handleSelectPref }) => {
   const { data, isLoading, isError } = useQueryPrefectures()
-  if (isLoading) return <Wrapper className="prefectureListArea">{STATUS_MESSAGE.isLoading}</Wrapper>
-  if (isError) return <Wrapper className="prefectureListArea">{STATUS_MESSAGE.isError}</Wrapper>
+
+  if (isLoading) return <Status className="prefAreaStatus" message={STATUS_MESSAGE.isLoading} />
+  if (isError) return <Status className="prefAreaStatus" message={STATUS_MESSAGE.isError} />
 
   return (
     <Wrapper className="prefectureListArea">

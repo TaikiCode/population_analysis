@@ -3,9 +3,10 @@ import Highcharts from 'highcharts'
 import HighchartsReact from 'highcharts-react-official'
 import { useQueryPopulation } from '../hooks/useQueryPopulations'
 import { Prefecture } from '../types/types'
-import Wrapper from './Wrapper'
+import Wrapper from './common/Wrapper'
 import { CHART_SIZE, DEFAULT_OPTIONS } from '../config/chartConfig'
 import { STATUS_MESSAGE } from '../config/statusMessage'
+import Status from './common/Status'
 
 interface Props {
   selectedPref: Prefecture[]
@@ -15,9 +16,9 @@ const Chart: VFC<Props> = ({ selectedPref }) => {
   const chartComponentRef = useRef<HighchartsReact.RefObject>(null)
   const { data, isLoading, isError } = useQueryPopulation(selectedPref)
 
-  if (!selectedPref.length) return <Wrapper className="chartArea">{STATUS_MESSAGE.isEmpty}</Wrapper>
-  if (isLoading) return <Wrapper className="chartArea">{STATUS_MESSAGE.isLoading}</Wrapper>
-  if (isError) return <Wrapper className="chartArea">{STATUS_MESSAGE.isError}</Wrapper>
+  if (!selectedPref.length) return <Status className="chartStatus" message={STATUS_MESSAGE.isEmpty} />
+  if (isLoading) return <Status className="chartStatus" message={STATUS_MESSAGE.isLoading} />
+  if (isError) return <Status className="chartStatus" message={STATUS_MESSAGE.isError} />
 
   const options: Highcharts.Options = {
     ...DEFAULT_OPTIONS,
