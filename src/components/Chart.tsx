@@ -1,36 +1,74 @@
-import { VFC } from 'react'
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Label } from 'recharts'
+import { useRef, VFC } from 'react'
+import Highcharts from 'highcharts'
+import HighchartsReact from 'highcharts-react-official'
 import { useQueryPopulation } from '../hooks/useQueryPopulations'
 import { Prefecture } from '../types/types'
 
 interface Props {
-  selectedPref: Prefecture
+  selectedPref: Prefecture[]
 }
 
 const Chart: VFC<Props> = ({ selectedPref }) => {
-  const { status, data } = useQueryPopulation(selectedPref)
+  const chartComponentRef = useRef<HighchartsReact.RefObject>(null)
+  const { data, isLoading, isError } = useQueryPopulation(selectedPref)
 
-  if (status === 'loading') return <div className="chartArea">Loading...</div>
-  if (status === 'error') return <div>Error</div>
+  if (!selectedPref.length) return <div className="chartArea">都道府県を選択してください。</div>
+  if (isLoading) return <div className="chartArea">Loading...</div>
+  if (isError) return <div>Error</div>
+
+  const options: Highcharts.Options = {
+    title: {
+      text: '',
+      style: {
+        display: 'none',
+      },
+    },
+    xAxis: {
+      title: {
+        text: '年度',
+      },
+      categories: data[0]?.categories,
+    },
+    yAxis: {
+      title: {
+        text: '人口数',
+      },
+    },
+    legend: {
+      layout: 'vertical',
+      align: 'right',
+      verticalAlign: 'middle',
+    },
+    series: data.map((item) => ({
+      type: 'line',
+      ...item?.series,
+    })),
+    responsive: {
+      rules: [
+        {
+          condition: {
+            maxWidth: 500,
+          },
+          chartOptions: {
+            legend: {
+              layout: 'horizontal',
+              align: 'center',
+              verticalAlign: 'bottom',
+            },
+          },
+        },
+      ],
+    },
+  }
 
   return (
     <div className="chartArea">
-      <ResponsiveContainer width="100%" height="90%">
-        <LineChart data={data} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="name">
-            <Label value="年度" offset={-10} position="insideBottom" />
-          </XAxis>
-          <YAxis>
-            <Label value="人口数" offset={-23} position="insideTopLeft" />
-          </YAxis>
-          <Tooltip />
-          <Legend align="right" verticalAlign="top" height={36} />
-          {[selectedPref].map((pref: Prefecture) => (
-            <Line key={pref.prefCode} type="monotone" dataKey={pref.prefName} stroke="#8884d8" />
-          ))}
-        </LineChart>
-      </ResponsiveContainer>
+      <HighchartsReact
+        highcharts={Highcharts}
+        options={options}
+        ref={chartComponentRef}
+        containerProps={{ style: { width: '100%', height: '100%' } }}
+      />
     </div>
   )
 }

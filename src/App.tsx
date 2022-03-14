@@ -1,11 +1,11 @@
-import { VFC, useState } from 'react'
+import { VFC } from 'react'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import { ReactQueryDevtools } from 'react-query/devtools'
 import Chart from './components/Chart'
 import Layout from './components/Layout'
 import PrefectureList from './components/PrefectureList'
 import './App.css'
-import { Prefecture } from './types/types'
+import { useSelectedPrefs } from './hooks/useSelectedPrefs'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -18,11 +18,12 @@ const queryClient = new QueryClient({
 
 const App: VFC = () => {
   // 選択中の都道府県
-  const [selectedPref, setSelectedPref] = useState<Prefecture>({ prefCode: 15, prefName: '新潟県' })
+
+  const { selectedPref, handleSelectPref } = useSelectedPrefs()
   return (
     <QueryClientProvider client={queryClient}>
       <Layout>
-        <PrefectureList setSelectedPref={setSelectedPref} />
+        <PrefectureList handleSelectPref={handleSelectPref} />
         <Chart selectedPref={selectedPref} />
       </Layout>
       <ReactQueryDevtools initialIsOpen={false} />

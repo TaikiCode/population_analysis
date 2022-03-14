@@ -1,4 +1,4 @@
-import { useQuery } from 'react-query'
+import { useQueries } from 'react-query'
 import axios from 'axios'
 import { Population, TotalPopulation, Chart, Prefecture } from '../types/types'
 
@@ -18,23 +18,39 @@ const getOnlyTotalPopulation = (result: Population): TotalPopulation[] => {
 }
 
 // chartに表示させるため、データ構造を変更
-const changeFormatForChart = (totalPopulation: TotalPopulation[], prefName: string): Chart[] => totalPopulation.map((data: TotalPopulation) => ({
-    name: data.year,
-    [prefName]: data.value,
-  }))
+const changeFormatForHighChart = (totalPopulation: TotalPopulation[], prefName: string): Chart => {
+  // 年数（X軸ラベル）を文字列型にして取得
+  const years: string[] = totalPopulation.map((data: TotalPopulation) => String(data.year))
+  const values: number[] = totalPopulation.map((data: TotalPopulation) => data.value)
+  return {
+    categories: years,
+    series: {
+      name: prefName,
+      data: values,
+    },
+  }
+}
 
-export const useQueryPopulation = ({ prefCode, prefName }: Prefecture) => {
-  const getData = async () => {
+export const useQueryPopulation = (prefList: Prefecture[]) => {
+  const getData = async ({ prefCode, prefName }: Prefecture) => {
     const { data } = await axios.get<Response>(`${URL}${prefCode}`, {
       headers: { 'X-API-KEY': API_KEY },
     })
     const totalPopulation = getOnlyTotalPopulation(data.result)
-    return changeFormatForChart(totalPopulation, prefName)
+    return changeFormatForHighChart(totalPopulation, prefName)
   }
 
-  return useQuery<Chart[], Error>({
-    queryKey: ['population', prefCode],
-    queryFn: getData,
-    staleTime: Infinity,
-  })
+  const results = useQueries(
+    prefList.map((pref: Prefecture) => ({
+      queryKey: ['population', pref.prefCode],
+      queryFn: () => getData(pref),
+      //   staleTime: Infinity,
+    }))
+  )
+
+  return {
+    data: results.map((result) => result.data),
+    isLoading: results.some((result) => result.isLoading),
+    isError: results.some((result) => result.isError),
+  }
 }
