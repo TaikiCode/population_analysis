@@ -1,0 +1,93 @@
+@use 'reset';
+@use 'variables' as v;
+@use 'mixin' as m;
+
+/* ページ全体 */
+.container {
+  height: 100vh;
+  width: 100vw;
+}
+
+/* タイトル部分 */
+.header {
+  height: map-get(v.$fheight, header);
+  width: 100%;
+  background: gray;
+  color: white;
+  @include m.flexCenter;
+}
+
+/* メイン部分 */
+.body {
+  height: map-get(v.$fheight, body);
+  width: 100%;
+  @include m.flexCenter(column);
+}
+
+/* 都道府県選択部分 */
+.prefectureListArea {
+  height: map-get(v.$fheight, prefectureListArea);
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 0 0 10px 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+  h4 {
+    text-align: center;
+    padding: 15px 0;
+  }
+  .prefectureList {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(120px, 100%), 1fr));
+    gap: 15px;
+    overflow: scroll;
+    label {
+      @include m.flexCenter;
+    }
+    input {
+      cursor: pointer;
+      margin-right: 5px;
+    }
+  }
+}
+
+.prefAreaStatus {
+  height: map-get(v.$fheight, prefectureListArea);
+  width: 100%;
+  @include m.flexCenter;
+}
+
+/* チャート部分 */
+.chartArea, 
+.chartStatus {
+  height: map-get(v.$fheight, chartArea);
+  width: 100%;
+  @include m.flexCenter;
+}
+
+/* レスポンシブ設定 */
+
+$breakpoint: (
+  'sp': 'screen and (min-width: 320px)',
+  'tablet': 'screen and (min-width: 600px)',
+  'pc': 'screen and (min-width: 1000px)',
+);
+
+// PC用の設定
+@media #{map-get($breakpoint, pc)} {
+  .body {
+    padding: 15px;
+  }
+  .prefectureListArea {
+    padding: 5px 5%;
+    h4 {
+      text-align: left;
+      padding: 5px 0;
+    }
+  }
+  .chartArea {
+    padding: 2% 10% 0 10%;
+  }
+}
