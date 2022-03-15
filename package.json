@@ -1,5 +1,6 @@
 {
   "name": "population_analysis",
+  "homepage": "https://taikicode.github.io/population_analysis",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
